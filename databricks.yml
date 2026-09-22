@@ -1,0 +1,37 @@
+bundle:
+  name: databricks-app-auto-terminate
+
+include:
+  - resources/*.yml
+
+variables:
+  # Comma-separated list of Databricks App names to manage.
+  # Override per-target or at deploy time: -v app_names="app-1,app-2"
+  app_names:
+    description: "Comma-separated app names to start/stop"
+    default: ""
+
+  # Quartz cron expressions for the stop and start schedules.
+  stop_cron:
+    description: "Quartz cron for the stop job (default: Friday 8 PM)"
+    default: "0 0 20 ? * FRI"
+
+  start_cron:
+    description: "Quartz cron for the start job (default: Monday 7 AM)"
+    default: "0 0 7 ? * MON"
+
+  timezone:
+    description: "IANA timezone for schedules"
+    default: "America/New_York"
+
+targets:
+  dev:
+    default: true
+    mode: development
+    variables:
+      app_names: ""   # Set your dev app names here
+
+  prod:
+    mode: production
+    variables:
+      app_names: ""   # Set your production app names here

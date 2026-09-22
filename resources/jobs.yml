@@ -1,0 +1,49 @@
+resources:
+  jobs:
+    # ── Stop apps before the weekend ──────────────────────────────
+    app_cleanup_stop:
+      name: "[${bundle.target}] App Auto-Terminate — Stop"
+      tags:
+        managed-by: databricks-app-auto-terminate-bundle
+        action: stop
+      parameters:
+        - name: app_names
+          default: ${var.app_names}
+        - name: action
+          default: stop
+      schedule:
+        quartz_cron_expression: ${var.stop_cron}
+        timezone_id: ${var.timezone}
+        pause_status: UNPAUSED
+      tasks:
+        - task_key: stop_apps
+          notebook_task:
+            notebook_path: ../src/app_lifecycle_manager.py
+            source: WORKSPACE
+            base_parameters:
+              app_names: "{{job.parameters.app_names}}"
+              action: "{{job.parameters.action}}"
+
+    # ── Start apps on Monday morning ─────────────────────────────
+    app_cleanup_start:
+      name: "[${bundle.target}] App Auto-Terminate — Start"
+      tags:
+        managed-by: databricks-app-auto-terminate-bundle
+        action: start
+      parameters:
+        - name: app_names
+          default: ${var.app_names}
+        - name: action
+          default: start
+      schedule:
+        quartz_cron_expression: ${var.start_cron}
+        timezone_id: ${var.timezone}
+        pause_status: UNPAUSED
+      tasks:
+        - task_key: start_apps
+          notebook_task:
+            notebook_path: ../src/app_lifecycle_manager.py
+            source: WORKSPACE
+            base_parameters:
+              app_names: "{{job.parameters.app_names}}"
+              action: "{{job.parameters.action}}"
