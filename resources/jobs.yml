@@ -14,7 +14,7 @@ resources:
       schedule:
         quartz_cron_expression: ${var.stop_cron}
         timezone_id: ${var.timezone}
-        pause_status: UNPAUSED
+        pause_status: PAUSED
       tasks:
         - task_key: stop_apps
           notebook_task:
@@ -38,7 +38,7 @@ resources:
       schedule:
         quartz_cron_expression: ${var.start_cron}
         timezone_id: ${var.timezone}
-        pause_status: UNPAUSED
+        pause_status: PAUSED
       tasks:
         - task_key: start_apps
           notebook_task:

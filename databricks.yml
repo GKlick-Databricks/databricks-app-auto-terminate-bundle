@@ -6,9 +6,10 @@ include:
 
 variables:
   # Comma-separated list of Databricks App names to manage.
+  # Use "__ALL__" to discover and target every app in the workspace.
   # Override per-target or at deploy time: -v app_names="app-1,app-2"
   app_names:
-    description: "Comma-separated app names to start/stop"
+    description: "Comma-separated app names to start/stop (or __ALL__ for all apps)"
     default: ""
 
   # Quartz cron expressions for the stop and start schedules.
@@ -29,9 +30,9 @@ targets:
     default: true
     mode: development
     variables:
-      app_names: ""   # Set your dev app names here
+      app_names: ""   # Set your dev app names here (or __ALL__)
 
   prod:
     mode: production
     variables:
-      app_names: ""   # Set your production app names here
+      app_names: ""   # Set your production app names here (or __ALL__)
